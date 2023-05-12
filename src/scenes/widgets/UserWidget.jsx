@@ -8,17 +8,17 @@ import { Box, Typography, Divider, useTheme } from "@mui/material";
 import UserImage from "../../components/UserImage";
 import FlexBetween from "../../components/FlexBetween";
 import WidgetWrapper from "../../components/WidgetWrapper";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { setNotification } from "../../state/index";
 import axiosInstance from "../../config/axiosInstance";
+import Twitter from "../../assets/twitter.png";
+import LinkedIn from "../../assets/linkedin.png";
 
 const UserWidget = ({ userId, picturePath }) => {
   const [user, setUser] = useState(null);
   const { palette } = useTheme();
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
+
   const dark = palette.neutral.dark;
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
@@ -96,14 +96,14 @@ const UserWidget = ({ userId, picturePath }) => {
         <Box p="1rem 0">
           <FlexBetween mb="0.5rem">
             <Typography color={medium}>Who's viewed your Profile</Typography>
-            <Typography color={main} fontweight="500">
+            <Typography color={main} fontWeight="500">
               {viewedProfile}
             </Typography>
           </FlexBetween>
 
           <FlexBetween mb="0.5rem">
             <Typography color={medium}>Impressions of your post</Typography>
-            <Typography color={main} fontweight="500">
+            <Typography color={main} fontWeight="500">
               {impressions}
             </Typography>
           </FlexBetween>
@@ -116,13 +116,28 @@ const UserWidget = ({ userId, picturePath }) => {
           </Typography>
           <FlexBetween gap="1rem" mb="0.5rem">
             <FlexBetween gap="1rem">
-              <img src="../assts.twitter.png" alt="twitter" />
+              <img src={Twitter} alt="twitter" />
               <Box>
-                <Typography color={main} fontweight="500">
+                <Typography color={main} fontWeight="500">
                   Twitter
                 </Typography>
+                <Typography color={medium}>Social Network</Typography>
               </Box>
             </FlexBetween>
+            <EditOutlined sx={{ color: main }} />
+          </FlexBetween>
+
+          <FlexBetween gap="1rem">
+            <FlexBetween gap="1rem">
+              <img src={LinkedIn} alt="linkedin" />
+              <Box>
+                <Typography color={main} fontWeight="500">
+                  LinkedIn
+                </Typography>
+                <Typography color={medium}>Network Platform</Typography>
+              </Box>
+            </FlexBetween>
+            <EditOutlined sx={{ color: main }} />
           </FlexBetween>
         </Box>
       </FlexBetween>

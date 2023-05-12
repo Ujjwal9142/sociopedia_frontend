@@ -1,4 +1,6 @@
 import axios from "axios";
+import { store } from "../main";
+import { setLogout, setNotification } from "../state/index";
 
 const axiosInstance = axios.create({
   baseURL: "http://localhost:3001",
@@ -16,6 +18,26 @@ axiosInstance.interceptors.request.use(
     return config;
   },
   (error) => {
+    return Promise.reject(error);
+  }
+);
+
+axiosInstance.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (error?.response?.status === 401) {
+      localStorage.removeItem("token");
+      store.dispatch(setLogout());
+      store.dispatch(
+        setNotification({
+          message: "Session expired, please login again.",
+          status: true,
+          type: "error",
+        })
+      );
+    }
     return Promise.reject(error);
   }
 );
