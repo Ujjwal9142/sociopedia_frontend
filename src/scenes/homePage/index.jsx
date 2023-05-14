@@ -2,6 +2,7 @@ import React from "react";
 import Navbar from "../navbar";
 import { Box, useMediaQuery } from "@mui/material";
 import UserWidget from "../widgets/UserWidget";
+import MyPostWidget from "../widgets/MyPostWidget";
 import { useSelector } from "react-redux";
 
 const HomePage = () => {
@@ -10,10 +11,25 @@ const HomePage = () => {
   return (
     <Box>
       <Navbar />
-      <Box>
-        <Box>
+      <Box
+        width="100%"
+        padding="2rem 6%"
+        display={isNonMobileScreens ? "flex" : "block"}
+        gap="0.5rem"
+        justifyContent="space-between"
+      >
+        <Box flexBasis={isNonMobileScreens ? "26%" : undefined}>
           <UserWidget userId={_id} picturePath={picturePath} />
         </Box>
+
+        <Box
+          flexBasis={isNonMobileScreens ? "42%" : undefined}
+          mt={isNonMobileScreens ? "0rem" : "2rem"}
+        >
+          <MyPostWidget picturePath={picturePath} />
+        </Box>
+
+        {isNonMobileScreens && <Box flexBasis="26%"></Box>}
       </Box>
     </Box>
   );

@@ -16,6 +16,7 @@ import { setLogin, setNotification } from "../../state/index";
 import Dropzone from "react-dropzone";
 import FlexBetween from "../../components/FlexBetween";
 import axiosInstance from "../../config/axiosInstance";
+import axios from "axios";
 
 const registerSchema = yup.object().shape({
   firstName: yup.string().required("Please enter your first name."),
@@ -65,6 +66,7 @@ const initialValuesLogin = {
 
 const Form = () => {
   const [pageType, setPageType] = useState("login");
+  const [picUrl, setPicUrl] = useState();
   const { palette } = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -103,6 +105,48 @@ const Form = () => {
     }
   };
 
+  const postPic = async (pic) => {
+    try {
+      if (pic === undefined) {
+        dispatch(
+          setNotification({
+            status: true,
+            message: "Please select an image",
+            type: "error",
+          })
+        );
+        return;
+      }
+
+      if (
+        pic.type === "image/jpeg" ||
+        pic.type === "image/jpg" ||
+        pic.type === "image/png"
+      ) {
+        const data = new FormData();
+        data.append("file", pic);
+        data.append("upload_preset", "Sociopedia");
+        data.append("cloud_name", "ujjwal914");
+        const res = await axios.post(
+          "https://api.cloudinary.com/v1_1/ujjwal914/image/upload",
+          data
+        );
+        console.log(res, "response");
+        setPicUrl(res?.data?.secure_url?.toString());
+      } else {
+        dispatch(
+          setNotification({
+            status: true,
+            message: "Only jpg, jpeg and png are allowed",
+            type: "error",
+          })
+        );
+      }
+    } catch (err) {
+      console.log(err, "err");
+    }
+  };
+
   const register = async (values, onSubmitProps) => {
     try {
       const res = await axiosInstance.post("/auth/register", {
@@ -113,7 +157,8 @@ const Form = () => {
         email: values.email,
         password: values.password,
         confirmPassword: values.confirmPassword,
-        picturePath: values.picture.name,
+        picturePath: picUrl,
+        picture: values.picture,
       });
 
       onSubmitProps.resetForm();
@@ -235,9 +280,10 @@ const Form = () => {
                     <Dropzone
                       multiple={false}
                       acceptedFiles=".jpg, .jpeg, .png"
-                      onDrop={(acceptedFiles) =>
-                        setFieldValue("picture", acceptedFiles[0])
-                      }
+                      onDrop={(acceptedFiles) => {
+                        setFieldValue("picture", acceptedFiles[0]);
+                        postPic(acceptedFiles[0]);
+                      }}
                     >
                       {({ getRootProps, getInputProps }) => (
                         <Box
