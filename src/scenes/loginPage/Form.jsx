@@ -125,13 +125,17 @@ const Form = () => {
       ) {
         const data = new FormData();
         data.append("file", pic);
-        data.append("upload_preset", "Sociopedia");
-        data.append("cloud_name", "ujjwal914");
+        data.append(
+          "upload_preset",
+          import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+        );
+        data.append("cloud_name", import.meta.env.VITE_CLOUDINARY_CLOUD_NAME);
         const res = await axios.post(
-          "https://api.cloudinary.com/v1_1/ujjwal914/image/upload",
+          `https://api.cloudinary.com/v1_1/${
+            import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+          }/image/upload`,
           data
         );
-        console.log(res, "response");
         setPicUrl(res?.data?.secure_url?.toString());
       } else {
         dispatch(
