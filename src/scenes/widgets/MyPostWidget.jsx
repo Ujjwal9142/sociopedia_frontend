@@ -26,7 +26,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import axiosInstance from "../../config/axiosInstance";
 import axios from "axios";
-import crypto from "crypto";
 
 const MyPostWidget = ({ picturePath }) => {
   const dispatch = useDispatch();
@@ -40,19 +39,6 @@ const MyPostWidget = ({ picturePath }) => {
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const medium = palette.neutral.medium;
   const mediumMain = palette.neutral.mediumMain;
-
-  const generateSHA1 = (data) => {
-    const hash = crypto.createHash("sha1");
-    hash.update(data);
-    return hash.digest("hex");
-  };
-
-  const generateSignature = (publicId) => {
-    const timestamp = new Date().getTime();
-    return `public_id=${publicId}&timestamp=${timestamp}${
-      import.meta.env.VITE_APP_API_SECRET
-    }`;
-  };
 
   const postPic = async (pic) => {
     try {
@@ -103,31 +89,18 @@ const MyPostWidget = ({ picturePath }) => {
     }
   };
 
-  const deletePic = async () => {
-    try {
-      const res = await axios.post(
-        `https://api.cloudinary.com/v1_1/${
-          import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-        }/image/destroy`,
-        {
-          public_id: imageData.public_id,
-          api_key: import.meta.env.VITE_APP_API_KEY,
-          signature: generateSHA1(generateSignature(imageData.public_id)),
-        }
-      );
-      console.log(res, "del");
-      setImageData({ url: null, public_id: null });
-    } catch (err) {
-      console.log(err, "error");
-    }
-  };
-
   // const handlePost = async () => {
   //   try {
-  //     SocioPosts
-  //     // const response = await axiosInstance.post('https://localhost:3001/posts/create', {
-  //     //   userId:
-  //     // });
+  //     const response = await axiosInstance.post(
+  //       "https://localhost:3001/posts/create",
+  //       {
+  //         userId: _id,
+  //         description: post,
+  //         picturePath: picturePath,
+  //       }
+  //     );
+  //     console.log(response, "res");
+  //     // dispatch(setPosts());
   //   } catch (err) {
   //     dispatch(
   //       setNotification({
@@ -192,8 +165,8 @@ const MyPostWidget = ({ picturePath }) => {
                 {image && (
                   <IconButton
                     onClick={() => {
-                      deletePic();
                       setImage(null);
+                      setImageData({ url: null, public_id: null });
                     }}
                     sx={{ width: "15%" }}
                   >
