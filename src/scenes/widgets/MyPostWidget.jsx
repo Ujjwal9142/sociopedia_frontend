@@ -89,28 +89,35 @@ const MyPostWidget = ({ picturePath }) => {
     }
   };
 
-  // const handlePost = async () => {
-  //   try {
-  //     const response = await axiosInstance.post(
-  //       "https://localhost:3001/posts/create",
-  //       {
-  //         userId: _id,
-  //         description: post,
-  //         picturePath: picturePath,
-  //       }
-  //     );
-  //     console.log(response, "res");
-  //     // dispatch(setPosts());
-  //   } catch (err) {
-  //     dispatch(
-  //       setNotification({
-  //         status: true,
-  //         message: "Some error occured, please try again later",
-  //         type: "error",
-  //       })
-  //     );
-  //   }
-  // };
+  const handlePost = async () => {
+    try {
+      const response = await axiosInstance.post("/posts/create", {
+        userId: _id,
+        description: post,
+        picturePath: imageData.url,
+      });
+      setImageData({ url: null, public_id: null });
+      setPost("");
+      setImage(null);
+      setIsImage(false);
+      dispatch(setPosts({ posts: response?.data?.posts }));
+      dispatch(
+        setNotification({
+          status: true,
+          message: "Created post successfully!",
+          type: "success",
+        })
+      );
+    } catch (err) {
+      dispatch(
+        setNotification({
+          status: true,
+          message: "Some error occured, please try again later",
+          type: "error",
+        })
+      );
+    }
+  };
 
   return (
     <WidgetWrapper>
@@ -191,6 +198,41 @@ const MyPostWidget = ({ picturePath }) => {
             Image
           </Typography>
         </FlexBetween>
+
+        {isNonMobileScreens ? (
+          <>
+            <FlexBetween gap="0.25rem">
+              <GifBoxOutlined sx={{ color: mediumMain }} />
+              <Typography color={mediumMain}>Clip</Typography>
+            </FlexBetween>
+
+            <FlexBetween gap="0.25rem">
+              <AttachFileOutlined sx={{ color: mediumMain }} />
+              <Typography color={mediumMain}>Attachment</Typography>
+            </FlexBetween>
+
+            <FlexBetween gap="0.25rem">
+              <MicOutlined sx={{ color: mediumMain }} />
+              <Typography color={mediumMain}>Audio</Typography>
+            </FlexBetween>
+          </>
+        ) : (
+          <FlexBetween gap="0.25rem">
+            <MoreHorizOutlined sx={{ color: mediumMain }} />
+          </FlexBetween>
+        )}
+
+        <Button
+          disabled={!post}
+          sx={{
+            color: palette.background.alt,
+            backgroundColor: palette.primary.main,
+            borderRadius: "3rem",
+          }}
+          onClick={handlePost}
+        >
+          POST
+        </Button>
       </FlexBetween>
     </WidgetWrapper>
   );
