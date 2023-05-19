@@ -7,13 +7,10 @@ import PostWidget from "./PostWidget";
 const PostsWidget = ({ userId, isProfile = false }) => {
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.posts);
-  //   console.log(posts, "posts");
 
   const getPosts = async () => {
     try {
       const res = await axiosInstance.get("/posts");
-      console.log(res, "res");
-
       dispatch(setPosts({ posts: res?.data?.posts }));
     } catch (err) {
       console.log(err, "error");
@@ -52,10 +49,10 @@ const PostsWidget = ({ userId, isProfile = false }) => {
           comments,
         }) => (
           <PostWidget
-            _id={_id}
-            userId={userId}
-            firstName={firstName}
-            lastName={lastName}
+            key={_id}
+            postId={_id}
+            postUserId={userId}
+            name={`${firstName} ${lastName}`}
             description={description}
             location={location}
             picturePath={picturePath}
