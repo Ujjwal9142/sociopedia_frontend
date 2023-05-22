@@ -14,6 +14,7 @@ function App() {
   const notification = useSelector((state) => state.notification);
   const isAuth = Boolean(useSelector((state) => state.token));
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
+  console.log(import.meta.env.PROD, "PROD ENV");
   return (
     <div className="app">
       <BrowserRouter>
