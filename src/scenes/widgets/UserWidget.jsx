@@ -27,9 +27,7 @@ const UserWidget = ({ userId, picturePath }) => {
     try {
       const response = await axiosInstance.get(`/users/${userId}`);
       setUser(response?.data?.user);
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   };
 
   useEffect(() => {
@@ -72,9 +70,9 @@ const UserWidget = ({ userId, picturePath }) => {
                 },
               }}
             >{`${firstName} ${lastName}`}</Typography>
-            <Typography
-              color={medium}
-            >{`${friends?.length} friends`}</Typography>
+            <Typography color={medium}>{`${friends?.length} ${
+              friends?.length == 1 ? `friend` : `friends`
+            }`}</Typography>
           </Box>
         </FlexBetween>
         <ManageAccountsOutlined />

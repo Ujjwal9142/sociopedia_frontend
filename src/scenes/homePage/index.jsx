@@ -5,6 +5,8 @@ import UserWidget from "../widgets/UserWidget";
 import MyPostWidget from "../widgets/MyPostWidget";
 import { useSelector } from "react-redux";
 import PostsWidget from "../../scenes/widgets/PostsWidget";
+import FriendListWidget from "../../scenes/widgets/FriendListWidget";
+import Popular from "../../components/Popular";
 
 const HomePage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
@@ -31,7 +33,12 @@ const HomePage = () => {
           <PostsWidget userId={_id} isProfile={false} />
         </Box>
 
-        {isNonMobileScreens && <Box flexBasis="26%"></Box>}
+        {isNonMobileScreens && (
+          <Box flexBasis="26%">
+            <FriendListWidget userId={_id} />
+            <Popular />
+          </Box>
+        )}
       </Box>
     </Box>
   );

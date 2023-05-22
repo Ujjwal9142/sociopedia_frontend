@@ -146,9 +146,7 @@ const Form = () => {
           })
         );
       }
-    } catch (err) {
-      console.log(err, "err");
-    }
+    } catch (err) {}
   };
 
   const register = async (values, onSubmitProps) => {

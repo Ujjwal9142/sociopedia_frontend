@@ -12,18 +12,14 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     try {
       const res = await axiosInstance.get("/posts");
       dispatch(setPosts({ posts: res?.data?.posts }));
-    } catch (err) {
-      console.log(err, "error");
-    }
+    } catch (err) {}
   };
 
   const getUserPosts = async () => {
     try {
       const res = await axiosInstance.get(`/posts/${userId}`);
       dispatch(setPosts({ posts: res?.data?.posts }));
-    } catch (err) {
-      console.log(err, "error");
-    }
+    } catch (err) {}
   };
 
   useEffect(() => {
@@ -59,6 +55,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
             userPicturePath={userPicturePath}
             likes={likes}
             comments={comments}
+            isProfile={isProfile}
           />
         )
       )}

@@ -3,7 +3,9 @@ import { store } from "../main";
 import { setLogout, setNotification } from "../state/index";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:3001",
+  baseURL: import.meta.env.DEV
+    ? import.meta.env.VITE_DEV_ENV_BACKEND
+    : import.meta.env.VITE_PROD_ENV_BACKEND,
   headers: {
     "Content-Type": "application/json",
   },

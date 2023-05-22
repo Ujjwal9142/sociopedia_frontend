@@ -84,9 +84,7 @@ const MyPostWidget = ({ picturePath }) => {
           })
         );
       }
-    } catch (err) {
-      console.log(err, "err");
-    }
+    } catch (err) {}
   };
 
   const handlePost = async () => {
